@@ -8,6 +8,6 @@
 
 ## Dependências
 
-- yt-dlp → Utilitário para fazer download de vídeos do YouTube.
-- aria2c → Ferramenta para fazer downloads com agilidade.
-- ffmpeg → Utilitário para conversão de vídeos e necessário para o yt-dlp.
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) → Utilitário para fazer download de vídeos do YouTube.
+- [aria2c](https://github.com/aria2/aria2) → Ferramenta para fazer downloads com agilidade.
+- [ffmpeg](https://github.com/FFmpeg/FFmpeg) → Utilitário para conversão de vídeos e necessário para o yt-dlp.
