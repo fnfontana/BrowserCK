@@ -9,8 +9,8 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 ; #NoTrayIcon                     ; If you don't want the tray icon, then uncomment this line.
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
-; download_directory = "%userprofile%\Downloads\Downloaded Videos"
-download_directory := "C:\Users\ffont\Downloads\Videos"
+download_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
+; download_directory := "C:\Users\ffont\Downloads\Videos"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
 ; Navigation arrows
@@ -22,10 +22,12 @@ download_directory := "C:\Users\ffont\Downloads\Videos"
 +!Up::Send !+{V}        ; alt+shift+z -> Pin/Unpin the current tab
 
 ; Numpad activation keys
-^Numpad0::Send !+{P}    ; numpad3 -> Activate Simple Print extension
-^Numpad1::Send !+{X}    ; numpad1 -> Activate Raindrop.io extension
-^Numpad2::Send !+{C}    ; numpad2 -> Activate Just Read extension
-^Numpad3::ytdl(download_directory)  ; numpad3 -> Download the current video
+^Numpad0::Send !+{P}                                ; numpad3 -> Activate Simple Print extension
+^Numpad1::Send !+{X}                                ; numpad1 -> Activate Raindrop.io extension
+^Numpad2::Send !+{C}                                ; numpad2 -> Activate Just Read extension
+^Numpad3::ytdl(download_directory)                  ; numpad3 -> Download the current video
+^!Numpad3::display_downdir(download_directory)      ; numpad3 -> Display the download directory
+;^!Numpad3::display_downdir(download_directory)     ; Quiet Mode
 
 return
 ; ----------------------------------------------------------------------------------------------------------------------
@@ -45,8 +47,9 @@ ytdl(download_dir) {
         Return
     }
     else {
-        RunWait %ComSpec% /c %dl_cmd% && pause
-        Run explorer.exe %download_dir%
+        Run %ComSpec% /c %dl_cmd% && explorer %download_dir% && exit
+        ; RunWait %ComSpec% /c %dl_cmd% && pause
+        ; Run explorer.exe %download_dir%
     }
     ; command_debug(dl_command)                   ; → For debugging purposes
     ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
@@ -55,7 +58,6 @@ ytdl(download_dir) {
 ; ----------------------------------------------------------------------------------------------------------------------
 create_download_directory(dl_dir_path) {
     ; Create the download directory if it doesn't exist
-    MsgBox, dl_dir_path: %dl_dir_path%  ; → For debugging purposes
     if (!FileExist(dl_dir_path)) {
         FileCreateDir, %dl_dir_path%
         ; MsgBox, Download directory:  %dl_dir_path%  created.  ; —→ For debugging purposes
@@ -139,4 +141,9 @@ command_debug(command) {
     WinActivate, ahk_class Notepad
     Send, Command Debug: `n
     Send, %command% `n
+}
+
+display_downdir(down_dir) {
+    MsgBox, , % "Download Info", % "Save videos to: " . down_dir, 20
+    Return
 }
