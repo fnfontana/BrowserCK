@@ -10,7 +10,6 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
 download_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
-; download_directory := "C:\Users\ffont\Downloads\Videos"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
 ; Navigation arrows
@@ -29,7 +28,7 @@ download_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
 ^!Numpad3::display_downdir(download_directory)      ; numpad3 -> Display the download directory
 ;^!Numpad3::display_downdir(download_directory)     ; Quiet Mode
 
-return
+Return
 ; ----------------------------------------------------------------------------------------------------------------------
 ; FUNCTIONS
 ytdl(download_dir) {
@@ -135,15 +134,15 @@ ffmpeg_post_processing() {
 
 ; ----------------------------------------------------------------------------------------------------------------------
 ; DEBBUGING FUNCTIONS
+display_downdir(down_dir) {
+    MsgBox, , % "Download Info", % "Save videos to: " . down_dir, 20
+    Return
+}
+
 command_debug(command) {
     Run, notepad.exe ; OK
     WinWait, ahk_class Notepad
     WinActivate, ahk_class Notepad
     Send, Command Debug: `n
     Send, %command% `n
-}
-
-display_downdir(down_dir) {
-    MsgBox, , % "Download Info", % "Save videos to: " . down_dir, 20
-    Return
 }
