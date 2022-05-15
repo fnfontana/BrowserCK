@@ -1,0 +1,1 @@
+yt-dlp -f best --no-warnings --progress --embed-chapters --sponsorblock-mark all --write-subs --sub-langs en-* --embed-subs --write-auto-sub --embed-metadata --cookies-from-browser chrome --external-downloader aria2c --external-downloader-args "-x 16 -k 1M" https://www.youtube.com/watch?v=5kAQUNFZJXY -P C:\Users\ffont\Downloads\ && echo DOWNLOAD FINISHED!! && pause
