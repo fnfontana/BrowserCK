@@ -6,7 +6,7 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 #NoEnv                            ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance ignore            ; Prevents multiple instances of the script from running at the same time.
 #IfWinActive, ahk_exe chrome.exe  ; If the google chrome window is active, then...
-; #NoTrayIcon                     ; If you don't want the tray icon, then uncomment this line.
+#NoTrayIcon                     ; If you don't want the tray icon, then uncomment this line.
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
 download_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
