@@ -13,12 +13,10 @@ download_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
 ; Navigation arrows
-^!Left::Send ^{PgUp}    ; ctrl+alt+pageup -> go to the previous tab
-^!Right::Send ^{PgDn}   ; ctrl+alt+pagedown -> go to the next tab
-^!Down::Send !+{Z}      ; alt+shift+z -> Enable/Disable Pop-up tab
-+!Down::Send !+{Z}      ; alt+shift+z -> Enable/Disable Pop-up tab
-^!Up::Send !+{V}        ; alt+shift+z -> Pin/Unpin the current tab
-+!Up::Send !+{V}        ; alt+shift+z -> Pin/Unpin the current tab
+^!Left::Send  ^{PgUp}    ; ctrl+alt+pageup          → go to the previous tab
+^!Right::Send ^{PgDn}    ; ctrl+alt+pagedown        → go to the next tab
+^!Up::Send    !+{V}      ; ctrl+alt+shift+uparrow   → Pin/Unpin the current tab
+^!Down::Send  !+{Z}      ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
 
 ; Numpad activation keys
 ^Numpad0::Send !+{P}                                ; numpad3 -> Activate Simple Print extension
