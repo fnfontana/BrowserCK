@@ -6,36 +6,45 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 #NoEnv                            ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance ignore            ; Prevents multiple instances of the script from running at the same time.
 #IfWinActive, ahk_exe chrome.exe  ; If the google chrome window is active, then...
-#NoTrayIcon                     ; If you don't want the tray icon, then uncomment this line.
+; #NoTrayIcon                     ; If you don't want the tray icon, then uncomment this line.
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
-download_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
+download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
+download_audio_directory := "C:\Users\" . A_UserName . "\Downloads\Audios"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
 ; Navigation arrows
-^!Left::Send  ^{PgUp}    ; ctrl+alt+pageup          → go to the previous tab
-^!Right::Send ^{PgDn}    ; ctrl+alt+pagedown        → go to the next tab
-^!Up::Send    !+{V}      ; ctrl+alt+shift+uparrow   → Pin/Unpin the current tab
-^!Down::Send  !+{Z}      ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
+^!Left::Send  ^{PgUp}              ; ctrl+alt+pageup          → go to the previous tab
+^!Right::Send ^{PgDn}              ; ctrl+alt+pagedown        → go to the next tab
+^!Up::Send    !+{V}                ; ctrl+alt+shift+uparrow   → Pin/Unpin the current tab
+^!Down::Send  !+{Z}                ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
 
 ; Numpad activation keys
-^Numpad0::Send !+{P}                                ; numpad3 -> Activate Simple Print extension
-^Numpad1::Send !+{X}                                ; numpad1 -> Activate Raindrop.io extension
-^Numpad2::Send !+{C}                                ; numpad2 -> Activate Just Read extension
-^Numpad3::ytdl(download_directory)                  ; numpad3 -> Download the current video
-^!Numpad3::display_downdir(download_directory)      ; numpad3 -> Display the download directory
-;^!Numpad3::display_downdir(download_directory)     ; Quiet Mode
+^Numpad0::Send !+{P}                                      ; numpad3 -> Activate Simple Print extension
+^Numpad1::Send !+{X}                                      ; numpad1 -> Activate Raindrop.io extension
+^Numpad2::Send !+{C}                                      ; numpad2 -> Activate Just Read extension
+^Numpad3::ytdl(download_video_directory, "video")         ; numpad3 -> Download the current video
+^!Numpad3::display_downdir(download_video_directory)      ; numpad3 -> Display the download directory
+^Numpad6::ytdl(download_audio_directory, "audio")         ; numpad6 -> Download the current video and extract the audio
 
 Return
 ; ----------------------------------------------------------------------------------------------------------------------
 ; FUNCTIONS
-ytdl(download_dir) {
-    MsgBox, 0x81124, yt-dlp, Deseja fazer download? , 30
-    ifMsgBox, No
-        Return
+ytdl(download_dir, media) {
+    if(media == "video") {
+        MsgBox, 0x81124, yt-dlp, Deseja fazer download do video? , 30
+        ifMsgBox, No
+            Return
+    }
+    else if(media == "audio") {
+        MsgBox, 0x81124, yt-dlp, Deseja fazer download e extrair o audio? , 30
+        ifMsgBox, No
+            Return
+    }
+    
 
     create_download_directory(download_dir)
-    dl_cmd := prepare_download(download_dir)
+    dl_cmd := prepare_download(download_dir, media)
 
     if(dl_cmd == "invalid_url") { 
         err_message := "Invalid URL: Check the video URL and try again."
@@ -66,7 +75,7 @@ create_download_directory(dl_dir_path) {
     }
 }
 
-prepare_download(download_dir) {
+prepare_download(download_dir, media) {
     ; CAPTURE THE CURRENT VIDEO URL
     Clipboard := ""             ; Empty the clipboard
     Send ^l                     ; Automatically select all the text in the url field
@@ -89,20 +98,42 @@ prepare_download(download_dir) {
     }
     ; --------------------------------------------------------------------------------------------------------------
     ; COMMAND LINE ARGUMENTS
-    dlp := "yt-dlp"                                                                    ; Downloader program
-    cm0 := " -f best --no-warnings --progress"                                         ; Best quality, no warnings, show progress
-    cm1 := " --embed-chapters --sponsorblock-mark all"                                 ; Embed chapters, block sponsors
-    cm2 := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub"         ; Write subtitles, embed subtitles, write auto-subtitles
-    cm3 := " --embed-metadata"                                                         ; Embed metadata
-    cm4 := " --cookies-from-browser chrome"                                            ; Use the cookies from the browser
-    cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M"""  ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
-    ;NOT WORKING! —→ cm6 := "--get-filename -o ""%(title)s.%(ext)s""  "                ; Use this to rename the file ←— NOT WORKING!!!
-    video_url := " " video_url                                                         ; Add a space at the beginning of the video URL
-    dld := " -P " download_dir                                                         ; Download output directory
+    if(media == "video") {
+        dlp := "yt-dlp"                                                                             ; Downloader program
+        cm0 := " -f best --no-warnings --progress"                                                  ; Best quality, no warnings, show progress
+        cm1 := " --embed-chapters --sponsorblock-mark all"                                          ; Embed chapters, block sponsors
+        cm2 := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub"                  ; Write subtitles, embed subtitles, write auto-subtitles
+        cm3 := " --embed-metadata"                                                                  ; Embed metadata
+        cm4 := " --cookies-from-browser chrome"                                                     ; Use the cookies from the browser
+        cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""     ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
+        ;NOT WORKING! —→ cm6 := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
+        video_url := " " video_url                                                                  ; Add a space at the beginning of the video URL
+        dld := " -P " download_dir                                                                  ; Download output directory
+        
+        dl_command := dlp cm0 cm1 cm2 cm3 cm4 cm5 video_url dld    
+                            ; Build the download command
+        ; MsgBox, %dl_command%   
+        Return %dl_command%  
+    }
+    else if(media == "audio") {
+        ; MsgBox, "Downloading audio..."                                                           ; —→ For debugging purposes
     
-    dl_command := dlp cm0 cm1 cm2 cm3 cm4 cm5 video_url dld                            ; Build the download command
-    ; MsgBox, %dl_command%   
-    Return %dl_command%  
+        dlp := "yt-dlp"                                                                            ; Downloader program
+        cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                             ; Extract audio, mp3, best quality
+        cm1 := " --embed-chapters --sponsorblock-remove all"                                       ; Embed chapters, block sponsors
+        cm2 := " --embed-thumbnail --embed-metadata"                                               ; Embed the thumbnail and metadata to output file
+        cm3 := " --no-warnings --progress --ignore-errors"                                         ; No warnings, show progress, ignore errors
+        cm4 := " --cookies-from-browser chrome"                                                    ; Use the cookies from the browser
+        ; cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""    ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
+        video_url := " " video_url                                                                 ; Add a space at the beginning of the video URL
+        dld := " -P " download_dir                                                                 ; Download output directory
+
+        ; Build the download command
+        dl_command := dlp cm0 cm1 cm2 cm3 cm4 video_url dld    
+
+        ; MsgBox, %dl_command%   
+        Return %dl_command%  
+    }
 }
 
 validate_url(video_url) {

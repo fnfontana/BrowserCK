@@ -1,3 +1,4 @@
 # Ignore the directory: ../GChromeCK/source/validate_command/
 source/validate_command/
 
+bin/GChromeCK.exe
