@@ -10,7 +10,8 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
 download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
-download_audio_directory := "C:\Users\" . A_UserName . "\Downloads\Audios"
+; download_audio_directory := "C:\Users\" . A_UserName . "\Downloads\Audios"
+download_audio_directory := "A:\Local\Fernando-Mobile\AntennaPod"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
 ; Navigation arrows
