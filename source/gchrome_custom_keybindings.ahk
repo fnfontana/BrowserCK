@@ -99,8 +99,10 @@ prepare_download(download_dir, media) {
     }
     ; --------------------------------------------------------------------------------------------------------------
     ; COMMAND LINE ARGUMENTS
+
     ffmpeg_location := "C:\ProgramData\chocolatey\bin\ffmpeg.exe" ; Location of ffmpeg.exe
 
+    ; Command line arguments for video download
     if(media == "video") {
         dlp := "yt-dlp"                                                                              ; Downloader program
         ffmp := " --ffmpeg-location " ffmpeg_location " "                                            ; ffmpeg location
@@ -125,21 +127,29 @@ prepare_download(download_dir, media) {
         Return %dl_command%                                                                          ; Return the command string to the main function
     }
 
+    ; Command line arguments for audio download
     else if(media == "audio") {
         ; MsgBox, "Downloading audio..."                                                             ; —→ For debugging purposes
     
         dlp := "yt-dlp"                                                                              ; Downloader program
-        cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                               ; Extract audio, mp3, best quality
-        cm1 := " --embed-chapters --sponsorblock-remove all"                                         ; Embed chapters, block sponsors
-        cm2 := " --embed-thumbnail --embed-metadata"                                                 ; Embed the thumbnail and metadata to output file
-        cm3 := " --no-warnings --progress --ignore-errors"                                           ; No warnings, show progress, ignore errors
-        cm4 := " --cookies-from-browser chrome"                                                      ; Use the cookies from the browser
+        ffmp := " --ffmpeg-location " ffmpeg_location " "                                            ; ffmpeg location
+        ; cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                             ; Extract audio, mp3, best quality
+        cm0a := " --format 251"                                                                      ; Download the best audio quality
+        cm0b := " --remux-video opus"                                                                ; Remux the video into opus
+        cm0c := " --no-warnings --progress"                                                          ; Don't show warnings, show progress
+        cm1a := " --embed-metadata"                                                                  ; Embed metadata
+        cm1b := " --embed-thumbnail"                                                                 ; Embed thumbnail
+        cm1c := " --embed-chapters"                                                                  ; Embed chapters
+        cm2a := " --sponsorblock-mark all"                                                           ; Mark all sponsorblock segments
+        cm2b := " --sponsorblock-remove default"                                                     ; Remove the default sponsorblock segments
+        cm4a := " --cookies-from-browser chrome"                                                     ; Use the cookies from the browser
+        ; For some reason, the audio download is not working well with aria2c, consider to test other arguments to improve the download speed
         ; cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""    ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
         video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
         dld := " -P " download_dir                                                                   ; Download output directory
 
         ; Build the download command
-        dl_command := dlp cm0 cm1 cm2 cm3 cm4 video_url dld    
+        dl_command := dlp ffmp cm0a cm0b cm0c cm1a cm1b cm1c cm2a cm2b cm4a video_url dld            ; Concatenate all the command line arguments
 
         ; MsgBox, %dl_command%   
         Return %dl_command%  
