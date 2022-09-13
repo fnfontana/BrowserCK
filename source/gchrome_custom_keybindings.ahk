@@ -115,13 +115,14 @@ prepare_download(download_dir, media) {
         cm2b := " --sponsorblock-remove default"                                                     ; Remove the default sponsorblock segments
         cm3a := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub"                  ; Write subtitles, embed subtitles, write auto-subtitles
         cm4a := " --cookies-from-browser chrome"                                                     ; Use the cookies from the browser
-        cm5a := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""     ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
+        cm5a := " --external-downloader aria2c"                                                      ; Use aria2c as the external downloader
+        cm5b := " --external-downloader-args ""-c -x 16 -k 1M -s 32"""                               ; Set aria2c arguments, see aria2c documentation for more info
         ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
         video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
         dld := " -P " download_dir                                                                   ; Download output directory
         
         ; Build the download command
-        dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm4a cm5a video_url dld       ; Concatenate all the command line arguments
+        dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm4a cm5a cm5b video_url dld  ; Concatenate all the command line arguments
 
         ; MsgBox, %dl_command%  ; → For debugging purposes  
         Return %dl_command%                                                                          ; Return the command string to the main function
@@ -130,11 +131,11 @@ prepare_download(download_dir, media) {
     ; Command line arguments for audio download
     else if(media == "audio") {
         ; MsgBox, "Downloading audio..."                                                             ; —→ For debugging purposes
-    
+
         dlp := "yt-dlp"                                                                              ; Downloader program
         ffmp := " --ffmpeg-location " ffmpeg_location " "                                            ; ffmpeg location
         ; cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                             ; Extract audio, mp3, best quality
-        cm0a := " --format 251"                                                                      ; Download the best audio quality
+        cm0a := " --format 251"                                                                      ; Download the best audio quality, 251 stands for webm audio
         cm0b := " --remux-video opus"                                                                ; Remux the video into opus
         cm0c := " --no-warnings --progress"                                                          ; Don't show warnings, show progress
         cm1a := " --embed-metadata"                                                                  ; Embed metadata
@@ -143,12 +144,18 @@ prepare_download(download_dir, media) {
         cm2a := " --sponsorblock-mark all"                                                           ; Mark all sponsorblock segments
         cm2b := " --sponsorblock-remove default"                                                     ; Remove the default sponsorblock segments
         cm4a := " --cookies-from-browser chrome"                                                     ; Use the cookies from the browser
-        ; For some reason, the audio download is not working well with aria2c, consider to test other arguments to improve the download speed
-        ; cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""    ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
+        
+        ; After made some tests I found out that aria2c is not the best option for audio downloads
+        ; Since generally the audio files are small, aria2c is not necessary and does not perform well
+        ; When I disocover optimal parameters to fix this, or maybe some future updates to aria2c or yt-dlp, then I will add aria2c to the audio download command
+        ; If you want to use aria2c for audio downloads, then uncomment the following lines and add cm5a and cm5b to dl_command concatenation
+        ; cm5a := " --external-downloader aria2c"                                                    ; Use aria2c as external downloader
+        ; cm5b := " --external-downloader-args ""-c -j 3 -x 16 -s 16 -k 1M"""                        ; Set aria2c arguments, see aria2c documentation for more info
+
         video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
         dld := " -P " download_dir                                                                   ; Download output directory
 
-        ; Build the download command
+        ; Build the download command        
         dl_command := dlp ffmp cm0a cm0b cm0c cm1a cm1b cm1c cm2a cm2b cm4a video_url dld            ; Concatenate all the command line arguments
 
         ; MsgBox, %dl_command%   
