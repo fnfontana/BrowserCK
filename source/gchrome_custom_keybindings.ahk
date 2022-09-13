@@ -24,9 +24,12 @@ download_audio_directory := "A:\Applications\AntennaPod"
 ^Numpad0::Send !+{P}                                      ; numpad3 -> Activate Simple Print extension
 ^Numpad1::Send !+{X}                                      ; numpad1 -> Activate Raindrop.io extension
 ^Numpad2::Send !+{C}                                      ; numpad2 -> Activate Just Read extension
+
 ^Numpad3::ytdl(download_video_directory, "video")         ; numpad3 -> Download the current video
 ^!Numpad3::display_downdir(download_video_directory)      ; numpad3 -> Display the download directory
+
 ^Numpad6::ytdl(download_audio_directory, "audio")         ; numpad6 -> Download the current video and extract the audio
+^!Numpad6::display_downdir(download_audio_directory)      ; numpad6 -> Display the download directory
 
 Return
 ; ----------------------------------------------------------------------------------------------------------------------
@@ -192,7 +195,7 @@ ffmpeg_post_processing() {
 ; ----------------------------------------------------------------------------------------------------------------------
 ; DEBBUGING FUNCTIONS
 display_downdir(down_dir) {
-    MsgBox, , % "Download Info", % "Save videos to: " . down_dir, 20
+    MsgBox, , % "Download Info", % "Save file path: " . down_dir, 20
     Return
 }
 
