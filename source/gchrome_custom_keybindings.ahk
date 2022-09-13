@@ -119,7 +119,8 @@ prepare_download(download_dir, media) {
         cm5b := " --external-downloader-args ""-c -x 16 -k 1M -s 32"""                               ; Set aria2c arguments, see aria2c documentation for more info
         ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
         video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
-        dld := " -P " download_dir                                                                   ; Download output directory
+        ; dld := " -P " download_dir                                                                   ; Download output directory
+        dld := " -o " download_dir "\%(title)s.%(ext)s"                                              ; Download output directory, then apply a template to rename the file
         
         ; Build the download command
         dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm4a cm5a cm5b video_url dld  ; Concatenate all the command line arguments
@@ -153,8 +154,8 @@ prepare_download(download_dir, media) {
         ; cm5b := " --external-downloader-args ""-c -j 3 -x 16 -s 16 -k 1M"""                        ; Set aria2c arguments, see aria2c documentation for more info
 
         video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
-        dld := " -P " download_dir                                                                   ; Download output directory
-
+        dld := " -o " download_dir "\%(title)s.%(ext)s"                                              ; Download output directory, then apply a template to rename the file
+        
         ; Build the download command        
         dl_command := dlp ffmp cm0a cm0b cm0c cm1a cm1b cm1c cm2a cm2b cm4a video_url dld            ; Concatenate all the command line arguments
 
