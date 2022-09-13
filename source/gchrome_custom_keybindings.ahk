@@ -6,19 +6,19 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 #NoEnv                            ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance ignore            ; Prevents multiple instances of the script from running at the same time.
 #IfWinActive, ahk_exe chrome.exe  ; If the google chrome window is active, then...
-; #NoTrayIcon                     ; If you don't want the tray icon, then uncomment this line.
+#NoTrayIcon                       ; If you don't want the tray icon, then uncomment this line.
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
 download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
 ; download_audio_directory := "C:\Users\" . A_UserName . "\Downloads\Audios"
-download_audio_directory := "A:\Local\Fernando-Mobile\AntennaPod"
+download_audio_directory := "A:\Applications\AntennaPod"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
 ; Navigation arrows
-^!Left::Send  ^{PgUp}              ; ctrl+alt+pageup          → go to the previous tab
-^!Right::Send ^{PgDn}              ; ctrl+alt+pagedown        → go to the next tab
-^!Up::Send    !+{V}                ; ctrl+alt+shift+uparrow   → Pin/Unpin the current tab
-^!Down::Send  !+{Z}                ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
+^!Left::Send  ^{PgUp}                                     ; ctrl+alt+pageup          → go to the previous tab
+^!Right::Send ^{PgDn}                                     ; ctrl+alt+pagedown        → go to the next tab
+^!Up::Send    !+{V}                                       ; ctrl+alt+shift+uparrow   → Pin/Unpin the current tab
+^!Down::Send  !+{Z}                                       ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
 
 ; Numpad activation keys
 ^Numpad0::Send !+{P}                                      ; numpad3 -> Activate Simple Print extension
@@ -99,35 +99,44 @@ prepare_download(download_dir, media) {
     }
     ; --------------------------------------------------------------------------------------------------------------
     ; COMMAND LINE ARGUMENTS
+    ffmpeg_location := "C:\ProgramData\chocolatey\bin\ffmpeg.exe" ; Location of ffmpeg.exe
+
     if(media == "video") {
-        dlp := "yt-dlp"                                                                             ; Downloader program
-        cm0 := " -f best --no-warnings --progress"                                                  ; Best quality, no warnings, show progress
-        cm1 := " --embed-chapters --sponsorblock-mark all"                                          ; Embed chapters, block sponsors
-        cm2 := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub"                  ; Write subtitles, embed subtitles, write auto-subtitles
-        cm3 := " --embed-metadata"                                                                  ; Embed metadata
-        cm4 := " --cookies-from-browser chrome"                                                     ; Use the cookies from the browser
-        cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""     ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
-        ;NOT WORKING! —→ cm6 := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
-        video_url := " " video_url                                                                  ; Add a space at the beginning of the video URL
-        dld := " -P " download_dir                                                                  ; Download output directory
+        dlp := "yt-dlp"                                                                              ; Downloader program
+        ffmp := " --ffmpeg-location " ffmpeg_location " "                                            ; ffmpeg location
+        cm0a := " --format bestvideo*+bestaudio/best --merge-output-format mkv"                      ; Download the best video and audio quality, then merge them into a mkv file
+        cm0b := " --no-warnings --progress"                                                          ; Don't show warnings, show progress
+        cm1a := " --embed-metadata"                                                                  ; Embed metadata
+        cm1b := " --embed-thumbnail"                                                                 ; Embed thumbnail
+        cm1c := " --embed-chapters"                                                                  ; Embed chapters
+        cm2a := " --sponsorblock-mark all"                                                           ; Mark all sponsorblock segments
+        cm2b := " --sponsorblock-remove default"                                                     ; Remove the default sponsorblock segments
+        cm3a := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub"                  ; Write subtitles, embed subtitles, write auto-subtitles
+        cm4a := " --cookies-from-browser chrome"                                                     ; Use the cookies from the browser
+        cm5a := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""     ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
+        ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
+        video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
+        dld := " -P " download_dir                                                                   ; Download output directory
         
-        dl_command := dlp cm0 cm1 cm2 cm3 cm4 cm5 video_url dld    
-                            ; Build the download command
-        ; MsgBox, %dl_command%   
-        Return %dl_command%  
+        ; Build the download command
+        dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm4a cm5a video_url dld       ; Concatenate all the command line arguments
+
+        ; MsgBox, %dl_command%  ; → For debugging purposes  
+        Return %dl_command%                                                                          ; Return the command string to the main function
     }
+
     else if(media == "audio") {
-        ; MsgBox, "Downloading audio..."                                                           ; —→ For debugging purposes
+        ; MsgBox, "Downloading audio..."                                                             ; —→ For debugging purposes
     
-        dlp := "yt-dlp"                                                                            ; Downloader program
-        cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                             ; Extract audio, mp3, best quality
-        cm1 := " --embed-chapters --sponsorblock-remove all"                                       ; Embed chapters, block sponsors
-        cm2 := " --embed-thumbnail --embed-metadata"                                               ; Embed the thumbnail and metadata to output file
-        cm3 := " --no-warnings --progress --ignore-errors"                                         ; No warnings, show progress, ignore errors
-        cm4 := " --cookies-from-browser chrome"                                                    ; Use the cookies from the browser
+        dlp := "yt-dlp"                                                                              ; Downloader program
+        cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                               ; Extract audio, mp3, best quality
+        cm1 := " --embed-chapters --sponsorblock-remove all"                                         ; Embed chapters, block sponsors
+        cm2 := " --embed-thumbnail --embed-metadata"                                                 ; Embed the thumbnail and metadata to output file
+        cm3 := " --no-warnings --progress --ignore-errors"                                           ; No warnings, show progress, ignore errors
+        cm4 := " --cookies-from-browser chrome"                                                      ; Use the cookies from the browser
         ; cm5 := " --external-downloader aria2c --external-downloader-args ""-x 16 -k 1M -s 32"""    ; Use aria2c as external downloader, 16 parallel downloads, 1M max download size
-        video_url := " " video_url                                                                 ; Add a space at the beginning of the video URL
-        dld := " -P " download_dir                                                                 ; Download output directory
+        video_url := " " video_url                                                                   ; Add a space at the beginning of the video URL
+        dld := " -P " download_dir                                                                   ; Download output directory
 
         ; Build the download command
         dl_command := dlp cm0 cm1 cm2 cm3 cm4 video_url dld    
