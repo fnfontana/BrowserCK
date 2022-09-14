@@ -22,7 +22,9 @@ An AutoHotkey script that enhances the Google Chrome browser with keyboard short
 - Download audio from current tab
   - Listen to YouTube videos like it was a podcast
 
-## Next to Implement
+---
+
+## Already Implemented
 
 - [x] Discover the cause of the instability causing the script to not work sometimes when using yt-dlp hotkey.
   
@@ -40,18 +42,27 @@ An AutoHotkey script that enhances the Google Chrome browser with keyboard short
 
 - [x] Implement a dedicated function or script to handle the yt-dlp command.
 
-- [ ] Fetch multiple links from the clipboard and download them.
+---
 
-- [ ] Present in a clean way the video title and metadata after downloading it.
+## Next to Implement
+
+- [ ] 
+
+---
+
+## Room for Improvments
 
 - [ ] Optimize yt-dlp arguments.
+- [ ] Insert modal showing the option to embed subtitles or not
+  - [ ] Or maybe assign an alternative hotkey for this option
+- [ ] Present in a clean way the video title and metadata after downloading it.
+- [ ] Fetch multiple links from the clipboard and download them.
+- [ ] Enable quiet mode (backgroud processing without gui)
+- [ ] Use ffmpeg post processing / compressing to save space
 
-## Improvments
+---
 
-- [ ] ffmpeg post processing / compressing to save space
-- [ ] enable quiet mode (backgroud processing without gui)
-
-## Ideas
+## Other Ideas
 
 - New name ideas:
   - Chrome Commander
