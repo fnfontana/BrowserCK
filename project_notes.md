@@ -30,9 +30,15 @@ An AutoHotkey script that enhances the Google Chrome browser with keyboard short
   
   `Run %ComSpec% /c %dl_cmd% && explorer %download_dir% && exit`
   
-  **Solution:** Try to create a **function** or a **batch script** that waits for the download to finish. It receives *dl_cmd* and *download_dir* as arguments, waits for the download to finish and then opens the download directory. Make sure to check if the folder is already open in explorer.exe, if so, then don’t open it again.
+  **Solutions:**
+  
+  - The problematic command mentioned before was replaced by a new one:
+    
+    `RunWait %ComSpec% /c %dl_cmd% && taskkill /f /im cmd.exe`
+  
+  - Followed by a new dedicated funciton *check_explorer_path(path)*, it solved the problem of creating a new window at each time the command run;
 
-- [ ] Implement a dedicated function or script to handle the yt-dlp command.
+- [x] Implement a dedicated function or script to handle the yt-dlp command.
 
 - [ ] Fetch multiple links from the clipboard and download them.
 

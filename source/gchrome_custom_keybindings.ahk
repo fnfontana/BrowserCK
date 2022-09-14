@@ -46,7 +46,6 @@ ytdl(download_dir, media) {
             Return
     }
     
-
     create_download_directory(download_dir)
     dl_cmd := prepare_download(download_dir, media)
 
@@ -57,26 +56,28 @@ ytdl(download_dir, media) {
         Return
     }
     else {
-        ; Opens the terminal and execute the download command
-        ; dl_cmd contains the string to be used by yt-dlp
-        RunWait %ComSpec% /c %dl_cmd% && pause
-        ; Run %ComSpec% /c %dl_cmd% && explorer %download_dir% && exit
+        ; Opens the terminal and execute the yt-dlp command to download the video
+        ; Variable dl_cmd contains the commands to yt-dlp
+
+        ; Close without wait for a timeout
+        RunWait %ComSpec% /c %dl_cmd% && taskkill /f /im cmd.exe
+
+        ; Close after wait for a timeout, useful for debugging
+        ; RunWait %ComSpec% /c %dl_cmd% && timeout /t 10 && taskkill /f /im cmd.exe
 
         ; Check if the download directory is already open on windows explorer
         ; If it is, then refresh the directory, otherwise, open the directory
         check_explorer_path(download_dir)
     }
-
+    ; For Debugging:
     ; command_debug(dl_command)                   ; → For debugging purposes
     ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
     Return
 }
 ; ----------------------------------------------------------------------------------------------------------------------
-
 ; This function is used to refresh the download directory after the download is finished.
 ; It receives a file path and check if there's explorer.exe window opened at that path.
-check_explorer_path(path)
-{
+check_explorer_path(path){
     ; Check if there's an explorer.exe window opened at the path
     ifWinExist, ahk_exe explorer.exe, %path%
     {
@@ -91,7 +92,6 @@ check_explorer_path(path)
     }
 
 }
-
 
 ; This function gets the URL of the current tab
 ; It returns the URL of the current tab
