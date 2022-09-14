@@ -71,6 +71,7 @@ ytdl(download_dir, media) {
     ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
     Return
 }
+; ----------------------------------------------------------------------------------------------------------------------
 
 ; This function is used to refresh the download directory after the download is finished.
 ; It receives a file path and check if there's explorer.exe window opened at that path.
@@ -94,16 +95,21 @@ check_explorer_path(path)
 
 ; This function gets the URL of the current tab
 ; It returns the URL of the current tab
-get_current_tab_url() {
-    ; Gets the URL of the current tab
-    SendInput, ^l
-    Send, ^c
-    url := ClipboardAll
-    Clipboard := ""  ; clean the clipboard
-    Return url
+capture_tab_url() {
+    Clipboard := ""             ; Empty the clipboard, in case it has something
+    Send ^l                     ; Automatically select all the text in the url field
+    Sleep, 5                    ; Insert a little delay to make sure the text is selected
+    Send ^c                     ; Copy the current URL into the clipboard, must be selected first in order to work
+    ClipWait, [ 3, 1]           ; Wait 3 seconds for the clipboard to be updated
+    if ErrorLevel  {            ; If the clipboard is empty, then...
+        MsgBox, The attempt to copy text onto the clipboard failed.
+        return
+    }
+    captured_url := Clipboard   ; Save the clipboard content into the variable
+    Clipboard := ""             ; Clear the clipboard for the next use
+    return captured_url         ; Return the captured URL
 }
 
-; ----------------------------------------------------------------------------------------------------------------------
 create_download_directory(dl_dir_path) {
     ; Create the download directory if it doesn't exist
     if (!FileExist(dl_dir_path)) {
@@ -119,19 +125,9 @@ create_download_directory(dl_dir_path) {
 }
 
 prepare_download(download_dir, media) {
-    ; CAPTURE THE CURRENT VIDEO URL
-    Clipboard := ""             ; Empty the clipboard
-    Send ^l                     ; Automatically select all the text in the url field
-    Sleep, 10                   ; insert a little delay to allow the text to be selected
-    Send ^c                     ; Copy the current URL into the clipboard, must be selected first in order to work
-    ClipWait, [ 3, 1]           ; Wait 3 seconds for the clipboard to be updated
-    if ErrorLevel  {            ; If the clipboard is empty, then...
-        MsgBox, The attempt to copy text onto the clipboard failed.
-        return
-    }
-    video_url := Clipboard      ; Get the URL from the clipboard
-    Clipboard := ""             ; Clear the clipboard
-    ; --------------------------------------------------------------------------------------------------------------
+    ; Get the URL to be downloaded
+    video_url := capture_tab_url() ; Capture the URL of the current tab
+
     ; After capture the video URL from the clipboard, then...
     ; Use regex to select all the query parameters from the URL
     video_url := RegExReplace(video_url, "&(?'QueryParams'[^&]*)")
