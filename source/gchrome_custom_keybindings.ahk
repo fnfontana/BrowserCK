@@ -10,7 +10,6 @@ SetTitleMatchMode 2               ; Recommended for new scripts to reduce the nu
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 ;----------------------------------------------------------------------------------------------------------------------
 download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
-; download_audio_directory := "C:\Users\" . A_UserName . "\Downloads\Audios"
 download_audio_directory := "A:\Applications\AntennaPod"
 ;----------------------------------------------------------------------------------------------------------------------
 ; KEYBINDINGS
@@ -25,6 +24,7 @@ download_audio_directory := "A:\Applications\AntennaPod"
 ^Numpad1::Send !+{X}                                      ; numpad1 -> Activate Raindrop.io extension
 ^Numpad2::Send !+{C}                                      ; numpad2 -> Activate Just Read extension
 
+; Numpad for video/audio download
 ^Numpad3::ytdl(download_video_directory, "video")         ; numpad3 -> Download the current video
 ^!Numpad3::display_downdir(download_video_directory)      ; numpad3 -> Display the download directory
 
