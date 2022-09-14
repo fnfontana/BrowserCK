@@ -58,20 +58,51 @@ ytdl(download_dir, media) {
     }
     else {
         ; Opens the terminal and execute the download command
-        Run %ComSpec% /c %dl_cmd% && explorer %download_dir% && exit
-        ; RunWait %ComSpec% /c %dl_cmd% && pause
-        ; Run explorer.exe %download_dir%
+        ; dl_cmd contains the string to be used by yt-dlp
+        RunWait %ComSpec% /c %dl_cmd% && pause
+        ; Run %ComSpec% /c %dl_cmd% && explorer %download_dir% && exit
 
-        ; This is a workaround, but needs to be improved
-        ; Try to create a function that waits for the download to finish
-        ; Or maybe a shell script that receives dl_cmd and download_dir as arguments,
-        ; waits for the download to finish and then opens the download directory.
-        ; Make sure to check if the folder is already open in explorer.exe, if so, then don't open it again.
+        ; Check if the download directory is already open on windows explorer
+        ; If it is, then refresh the directory, otherwise, open the directory
+        check_explorer_path(download_dir)
     }
+
     ; command_debug(dl_command)                   ; → For debugging purposes
     ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
     Return
 }
+
+; This function is used to refresh the download directory after the download is finished.
+; It receives a file path and check if there's explorer.exe window opened at that path.
+check_explorer_path(path)
+{
+    ; Check if there's an explorer.exe window opened at the path
+    ifWinExist, ahk_exe explorer.exe, %path%
+    {
+        ; If there is, then refresh the window
+        WinActivate, ahk_exe explorer.exe, %path%
+        Send, ^r
+    }
+    else
+    {
+        ; Otherwise, open a new explorer.exe window at the path
+        Run, explorer %path%
+    }
+
+}
+
+
+; This function gets the URL of the current tab
+; It returns the URL of the current tab
+get_current_tab_url() {
+    ; Gets the URL of the current tab
+    SendInput, ^l
+    Send, ^c
+    url := ClipboardAll
+    Clipboard := ""  ; clean the clipboard
+    Return url
+}
+
 ; ----------------------------------------------------------------------------------------------------------------------
 create_download_directory(dl_dir_path) {
     ; Create the download directory if it doesn't exist
