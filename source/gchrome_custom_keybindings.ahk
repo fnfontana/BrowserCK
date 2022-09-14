@@ -57,9 +57,16 @@ ytdl(download_dir, media) {
         Return
     }
     else {
+        ; Opens the terminal and execute the download command
         Run %ComSpec% /c %dl_cmd% && explorer %download_dir% && exit
         ; RunWait %ComSpec% /c %dl_cmd% && pause
         ; Run explorer.exe %download_dir%
+
+        ; This is a workaround, but needs to be improved
+        ; Try to create a function that waits for the download to finish
+        ; Or maybe a shell script that receives dl_cmd and download_dir as arguments,
+        ; waits for the download to finish and then opens the download directory.
+        ; Make sure to check if the folder is already open in explorer.exe, if so, then don't open it again.
     }
     ; command_debug(dl_command)                   ; → For debugging purposes
     ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
@@ -73,16 +80,18 @@ create_download_directory(dl_dir_path) {
         ; MsgBox, Download directory:  %dl_dir_path%  created.  ; —→ For debugging purposes
         return
     }
-    else {
+    ; else {
         ; MsgBox, Download directory:  %dl_dir_path% already exists.  ; —→ For debugging purposes
-        return
-    }
+        ; return
+    ; }
+    return
 }
 
 prepare_download(download_dir, media) {
     ; CAPTURE THE CURRENT VIDEO URL
     Clipboard := ""             ; Empty the clipboard
     Send ^l                     ; Automatically select all the text in the url field
+    Sleep, 10                   ; insert a little delay to allow the text to be selected
     Send ^c                     ; Copy the current URL into the clipboard, must be selected first in order to work
     ClipWait, [ 3, 1]           ; Wait 3 seconds for the clipboard to be updated
     if ErrorLevel  {            ; If the clipboard is empty, then...
@@ -90,7 +99,7 @@ prepare_download(download_dir, media) {
         return
     }
     video_url := Clipboard      ; Get the URL from the clipboard
-    Clipboard := ""             ; Empty the clipboard
+    Clipboard := ""             ; Clear the clipboard
     ; --------------------------------------------------------------------------------------------------------------
     ; After capture the video URL from the clipboard, then...
     ; Use regex to select all the query parameters from the URL
@@ -181,16 +190,18 @@ validate_url(video_url) {
         return true                       ; The URL is valid
     }
     else {
-    ;   MsgBox, % "Invalid URL, please try again."              
-        return false                      ; The URL is invalid
+        MsgBox, % "Invalid URL, please try again."              ; Inform the user that the URL is invalid
+        return false                                            ; The URL is invalid
     }
 }
 
-ffmpeg_post_processing() {
-    ; Uses ffmpeg to compress the video for space saving
-    ; ffmpeg -i %video_url% -c:v libx264 -crf 18 -preset slow -c:a copy -c:s mov_text %(title)s.mp4 
-    Return
-}
+; ----------------------------------------------------------------------------------------------------------------------
+; FUTURE IMPLEMENTATIONS
+; ffmpeg_post_processing() {
+;     ; Uses ffmpeg to compress the video for space saving
+;     ; ffmpeg -i %video_url% -c:v libx264 -crf 18 -preset slow -c:a copy -c:s mov_text %(title)s.mp4 
+;     Return
+; }
 
 ; ----------------------------------------------------------------------------------------------------------------------
 ; DEBBUGING FUNCTIONS
