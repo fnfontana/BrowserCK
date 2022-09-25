@@ -59,18 +59,22 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             ; Opens the terminal and execute the yt-dlp command to download the video
             ; Variable dl_cmd contains the commands to yt-dlp
 
-            ; Close without wait for a timeout
-            RunWait %ComSpec% /c %dl_cmd% && taskkill /f /im cmd.exe
-
             ; Close after wait for a timeout, useful for debugging
             ; RunWait %ComSpec% /c %dl_cmd% && timeout /t 10 && taskkill /f /im cmd.exe
 
+            ; Close without wait for a timeout
+            RunWait %ComSpec% /c %dl_cmd% ; && taskkill /f /im cmd.exe
+
+            ; Store on a variable if RunWait command was well sucesseded or not
+            ; run_result := ErrorLevel
+            ; Show it on a msgbox
+            ; MsgBox % run_result ; —→ For debugging purposes
+
             ; If the previous command was sucessful, then...
-            if(ErrorLevel == 0) { 
-                ; Checks if the download directory is already open on windows explorer
-                ; If it is, then refresh the directory, otherwise, open the directory
+            if(ErrorLevel == 0)
                 check_explorer_path(download_dir)
-            }
+            ; Checks if the download directory is already open on windows explorer
+            ; If it is, then refresh the directory, otherwise, open the directory
         }
         ; For Debugging:
         ; command_debug(dl_command)                   ; → For debugging purposes
