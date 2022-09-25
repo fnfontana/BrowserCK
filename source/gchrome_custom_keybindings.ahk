@@ -156,7 +156,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             cm2a := " --sponsorblock-mark all" ; Mark all sponsorblock segments
             cm2b := " --sponsorblock-remove default" ; Remove the default sponsorblock segments
             cm3a := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub" ; Write subtitles, embed subtitles, write auto-subtitles
-            cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
+            ; cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
             cm5a := " --external-downloader aria2c" ; Use aria2c as the external downloader
             cm5b := " --external-downloader-args ""-c -x 16 -k 1M -s 32""" ; Set aria2c arguments, see aria2c documentation for more info
             ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
@@ -186,7 +186,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             cm1c := " --embed-chapters" ; Embed chapters
             cm2a := " --sponsorblock-mark all" ; Mark all sponsorblock segments
             cm2b := " --sponsorblock-remove default" ; Remove the default sponsorblock segments
-            cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
+            ; cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
 
             ; After made some tests I found out that aria2c is not the best option for audio downloads
             ; Since generally the audio files are small, aria2c is not necessary and does not perform well
