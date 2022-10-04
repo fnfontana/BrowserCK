@@ -234,6 +234,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
     ; ffmpeg_post_processing() {
     ;     ; Uses ffmpeg to compress the video for space saving
     ;     ; ffmpeg -i %video_url% -c:v libx264 -crf 18 -preset slow -c:a copy -c:s mov_text %(title)s.mp4
+    ;     ; ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4
     ;     Return
     ; }
 
