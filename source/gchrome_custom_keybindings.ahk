@@ -20,16 +20,16 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
     ^!Down::Send !+{Z} ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
 
     ; Numpad activation keys
-    ^Numpad0::Send !+{P} ; numpad3 -> Activate Simple Print extension
-    ^Numpad1::Send !+{X} ; numpad1 -> Activate Raindrop.io extension
-    ^Numpad2::Send !+{C} ; numpad2 -> Activate Just Read extension
+    ^Numpad0::Send !+{P} ; numpad3 → Activate Simple Print extension
+    ^Numpad1::Send !+{X} ; numpad1 → Activate Raindrop.io extension
+    ^Numpad2::Send !+{C} ; numpad2 → Activate Just Read extension
 
     ; Numpad for video/audio download
-    ^Numpad3::ytdl(download_video_directory, "video") ; numpad3 -> Download the current video
-    ^!Numpad3::display_downdir(download_video_directory) ; numpad3 -> Display the download directory
+    ^Numpad3::ytdl(download_video_directory, "video") ; numpad3 → Download the current video
+    ^!Numpad3::display_downdir(download_video_directory) ; numpad3 → Display the download directory
 
-    ^Numpad6::ytdl(download_audio_directory, "audio") ; numpad6 -> Download the current video and extract the audio
-    ^!Numpad6::display_downdir(download_audio_directory) ; numpad6 -> Display the download directory
+    ^Numpad6::ytdl(download_audio_directory, "audio") ; numpad6 → Download the current video and extract the audio
+    ^!Numpad6::display_downdir(download_audio_directory) ; numpad6 → Display the download directory
 
     Return
     ; ----------------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
         create_download_directory(download_dir)
         dl_cmd := prepare_download(download_dir, media)
 
-        if(dl_cmd == "invalid_url") { 
+        if(dl_cmd == "invalid_url") {
             err_message := "Invalid URL: Check the video URL and try again."
             MsgBox, , yt-dlp, % err_message, 30
             ; MsgBox % dl_cmd                           ; —→ For debugging purposes
@@ -171,7 +171,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             ; Build the download command
             dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm4a cm5a cm5b video_url dld ; Concatenate all the command line arguments
 
-            ; MsgBox, %dl_command%  ; → For debugging purposes  
+            ; MsgBox, %dl_command%  ; → For debugging purposes
             Return %dl_command% ; Return the command string to the main function
         }
 
@@ -202,11 +202,11 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             video_url := " " video_url ; Add a space at the beginning of the video URL
             dld := " -o " download_dir "\%(title)s.%(ext)s" ; Download output directory, then apply a template to rename the file
 
-            ; Build the download command        
+            ; Build the download command
             dl_command := dlp ffmp cm0a cm0b cm0c cm1a cm1b cm1c cm2a cm2b cm4a video_url dld ; Concatenate all the command line arguments
 
-            ; MsgBox, %dl_command%   
-            Return %dl_command% 
+            ; MsgBox, %dl_command%
+            Return %dl_command%
         }
     }
 
@@ -233,7 +233,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
     ; FUTURE IMPLEMENTATIONS
     ; ffmpeg_post_processing() {
     ;     ; Uses ffmpeg to compress the video for space saving
-    ;     ; ffmpeg -i %video_url% -c:v libx264 -crf 18 -preset slow -c:a copy -c:s mov_text %(title)s.mp4 
+    ;     ; ffmpeg -i %video_url% -c:v libx264 -crf 18 -preset slow -c:a copy -c:s mov_text %(title)s.mp4
     ;     Return
     ; }
 
