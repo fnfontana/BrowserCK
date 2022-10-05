@@ -165,8 +165,9 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             IfMsgBox, Yes
             {
                 ; Write subtitles, embed subtitles, write auto-subtitles
-                cm3a := " --write-subs --sub-langs en-*,pt-*"
-                cm3b := " --embed-subs --write-auto-sub"
+                cm3a := " --sub-langs en-*,pt-* --sub-format best" ; Select subtitles idioms and the best format available
+                cm3b := " --embed-subs --write-auto-sub" ; Embed subtitles into the video, write auto-subtitles
+                cm3c := " --write-subs" ; Write subtitles to external file
             }
             else
             {
