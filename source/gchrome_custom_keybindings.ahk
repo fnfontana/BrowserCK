@@ -176,7 +176,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
 
             ; cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
             cm5a := " --external-downloader aria2c" ; Use aria2c as the external downloader
-            cm5b := " --external-downloader-args ""-c -x 16 -k 1M -s 32""" ; Set aria2c arguments, see aria2c documentation for more info
+            cm5b := " --external-downloader-args ""-c -x16 -k1M -s16""" ; Set aria2c arguments, see aria2c documentation for more info
             ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
             video_url := " " video_url ; Add a space at the beginning of the video URL
             ; dld := " -P " download_dir                                                                   ; Download output directory
