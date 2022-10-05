@@ -159,7 +159,21 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             cm1c := " --embed-chapters" ; Embed chapters
             cm2a := " --sponsorblock-mark all" ; Mark all sponsorblock segments
             cm2b := " --sponsorblock-remove default" ; Remove the default sponsorblock segments
-            cm3a := " --write-subs --sub-langs en-*,pt-* --embed-subs --write-auto-sub" ; Write subtitles, embed subtitles, write auto-subtitles
+
+            ; MsgBox to ask the user if he wants to download the video with or without subtitles
+            MsgBox, 0x81124, yt-dlp, Deseja fazer download do video com legendas? , 30
+            IfMsgBox, Yes
+            {
+                ; Write subtitles, embed subtitles, write auto-subtitles
+                cm3a := " --write-subs --sub-langs en-*,pt-*"
+                cm3b := " --embed-subs --write-auto-sub"
+            }
+            else
+            {
+                cm3a := " --no-write-auto-sub" ; Don't write automatic subtitles
+                cm3b := " --no-embed-subs" ; Don't embed subtitles
+            }
+
             ; cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
             cm5a := " --external-downloader aria2c" ; Use aria2c as the external downloader
             cm5b := " --external-downloader-args ""-c -x 16 -k 1M -s 32""" ; Set aria2c arguments, see aria2c documentation for more info
@@ -169,7 +183,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             dld := " -o " download_dir "\%(title)s.%(ext)s" ; Download output directory, then apply a template to rename the file
 
             ; Build the download command
-            dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm4a cm5a cm5b video_url dld ; Concatenate all the command line arguments
+            dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm3b cm5a cm5b video_url dld ; Concatenate all the command line arguments
 
             ; MsgBox, %dl_command%  ; → For debugging purposes
             Return %dl_command% ; Return the command string to the main function
