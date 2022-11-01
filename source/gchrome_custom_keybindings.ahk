@@ -9,8 +9,15 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
 #NoTrayIcon ; If you don't want the tray icon, then uncomment this line.
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 
-; Chrome Browser
-#IfWinActive, ahk_exe chrome.exe
+; Checks if the active window is Google Chrome or Brave Browser
+
+; Google Chrome
+; #IfWinActive, ahk_exe chrome.exe
+; --- Paste your hotkeys here ---
+; Note: If you just need Chrome, then replace brave.exe with chrome.exe.
+
+; Brave Browser
+#IfWinActive, ahk_exe brave.exe
     ;----------------------------------------------------------------------------------------------------------------------
     download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
     download_audio_directory := "A:\Applications\AntennaPod"
