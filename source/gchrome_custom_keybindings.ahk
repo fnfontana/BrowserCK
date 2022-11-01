@@ -9,7 +9,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
 #NoTrayIcon ; If you don't want the tray icon, then uncomment this line.
 ; #Warn                           ; Enable warnings to assist with detecting common errors.
 
-; Brave Browser
+; Chrome Browser
 #IfWinActive, ahk_exe chrome.exe
     ;----------------------------------------------------------------------------------------------------------------------
     download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
