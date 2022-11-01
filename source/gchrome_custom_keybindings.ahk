@@ -5,35 +5,42 @@ SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
 SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false positives.
 #NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
 #SingleInstance ignore ; Prevents multiple instances of the script from running at the same time.
-#IfWinActive, ahk_exe chrome.exe ; If the google chrome window is active, then...
-    #NoTrayIcon ; If you don't want the tray icon, then uncomment this line.
-    ; #Warn                           ; Enable warnings to assist with detecting common errors.
+
+#NoTrayIcon ; If you don't want the tray icon, then uncomment this line.
+; #Warn                           ; Enable warnings to assist with detecting common errors.
+
+; Brave Browser
+#IfWinActive, ahk_exe chrome.exe
     ;----------------------------------------------------------------------------------------------------------------------
     download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
     download_audio_directory := "A:\Applications\AntennaPod"
     ;----------------------------------------------------------------------------------------------------------------------
     ; KEYBINDINGS
     ; Navigation arrows
-    ^!Left::Send ^{PgUp} ; ctrl+alt+pageup          → go to the previous tab
-    ^!Right::Send ^{PgDn} ; ctrl+alt+pagedown        → go to the next tab
-    ^!Up::Send !+{V} ; ctrl+alt+shift+uparrow   → Pin/Unpin the current tab
-    ^!Down::Send !+{Z} ; ctrl+alt+shift+downarrow → Pin/Unpin the current tab
+    ^!Left::Send ^{PgUp} ;  ctrl+alt+pageup              →  go to the previous tab
+    ^!Right::Send ^{PgDn} ; ctrl+alt+pagedown            →  go to the next tab
+    ^!Up::Send !+{V} ;      ctrl+alt+shift+uparrow       →  Pin/Unpin the current tab
+    ^!Down::Send !+{Z} ;    ctrl+alt+shift+downarrow     →  Pin/Unpin the current tab
 
     ; Numpad activation keys
-    ^Numpad0::Send !+{P} ; numpad3 → Activate Simple Print extension
-    ^Numpad1::Send !+{X} ; numpad1 → Activate Raindrop.io extension
-    ^Numpad2::Send !+{C} ; numpad2 → Activate Just Read extension
+    ^Numpad0::Send !+{P} ;                                  numpad3 → Activate Simple Print extension
+    ^Numpad1::Send !+{X} ;                                  numpad1 → Activate Raindrop.io extension
+    ^Numpad2::Send !+{C} ;                                  numpad2 → Activate Just Read extension
 
     ; Numpad for video/audio download
-    ^Numpad3::ytdl(download_video_directory, "video") ; numpad3 → Download the current video
-    ^!Numpad3::display_downdir(download_video_directory) ; numpad3 → Display the download directory
+    ^Numpad3::ytdl(download_video_directory, "video") ;     numpad3 → Download the current video
+    ^!Numpad3::display_downdir(download_video_directory) ;  numpad3 → Display the download directory
 
-    ^Numpad6::ytdl(download_audio_directory, "audio") ; numpad6 → Download the current video and extract the audio
-    ^!Numpad6::display_downdir(download_audio_directory) ; numpad6 → Display the download directory
+    ^Numpad6::ytdl(download_audio_directory, "audio") ;     numpad6 → Download the current video and extract the audio
+    ^!Numpad6::display_downdir(download_audio_directory) ;  numpad6 → Display the download directory
 
     Return
+
     ; ----------------------------------------------------------------------------------------------------------------------
+
     ; FUNCTIONS
+
+    ; This function is used to download the current video or audio from youtube
     ytdl(download_dir, media) {
         if(media == "video") {
             MsgBox, 0x81124, yt-dlp, Deseja fazer download do video? , 30
@@ -81,7 +88,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
         ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
         Return
     }
-    ; ----------------------------------------------------------------------------------------------------------------------
+
     ; This function is used to refresh the download directory after the download is finished.
     ; It receives a file path and check if there's explorer.exe window opened at that path.
     check_explorer_path(path){
@@ -103,25 +110,25 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
     ; This function gets the URL of the current tab
     ; It returns the URL of the current tab
     capture_tab_url() {
-        Clipboard := "" ; Empty the clipboard, in case it has something
-        Send ^l ; Automatically select all the text in the url field
-        Sleep, 5 ; Insert a little delay to make sure the text is selected
-        Send ^c ; Copy the current URL into the clipboard, must be selected first in order to work
-        ClipWait, [ 3, 1] ; Wait 3 seconds for the clipboard to be updated
-        if ErrorLevel { ; If the clipboard is empty, then...
+        Clipboard := "" ;       Empty the clipboard, in case it has something
+        Send ^l ;               Automatically select all the text in the url field
+        Sleep, 5 ;              Insert a little delay to make sure the text is selected
+        Send ^c ;               Copy the current URL into the clipboard, must be selected first in order to work
+        ClipWait, [ 3, 1] ;     Wait 3 seconds for the clipboard to be updated
+        if ErrorLevel { ;       If the clipboard is empty, then...
             MsgBox, The attempt to copy text onto the clipboard failed.
             return
         }
-        captured_url := Clipboard ; Save the clipboard content into the variable
-        Clipboard := "" ; Clear the clipboard for the next use
-        return captured_url ; Return the captured URL
+        captured_url := Clipboard ;    Save the clipboard content into the variable
+        Clipboard := "" ;              Clear the clipboard for the next use
+        return captured_url ;          Return the captured URL
     }
 
     create_download_directory(dl_dir_path) {
         ; Create the download directory if it doesn't exist
         if (!FileExist(dl_dir_path)) {
             FileCreateDir, %dl_dir_path%
-            ; MsgBox, Download directory:  %dl_dir_path%  created.  ; —→ For debugging purposes
+            ; MsgBox, Download directory:  %dl_dir_path%  created.  ;   —→ For debugging purposes
             return
         }
         ; else {
