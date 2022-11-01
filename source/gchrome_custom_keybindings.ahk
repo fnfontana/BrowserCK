@@ -1,13 +1,13 @@
 ; This script is intended to be used to replace the default keybindings to switch between tabs in google chrome.
 ; ----------------------------------------------------------------------------------------------------------------------
-SendMode Input ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir% ; Ensures a consistent starting directory.
-SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false positives.
-#NoEnv ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance ignore ; Prevents multiple instances of the script from running at the same time.
+SendMode Input ;                 Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir% ;    Ensures a consistent starting directory.
+SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the number of false positives.
+#NoEnv ;                         Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance ignore ;         Prevents multiple instances of the script from running at the same time.
 
-#NoTrayIcon ; If you don't want the tray icon, then uncomment this line.
-; #Warn                           ; Enable warnings to assist with detecting common errors.
+#NoTrayIcon ;                    If you don't want the tray icon, then uncomment this line.
+; #Warn ;                        Enable warnings to assist with detecting common errors.
 
 ; Checks if the active window is Google Chrome or Brave Browser
 
@@ -82,7 +82,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             ; Store on a variable if RunWait command was well sucesseded or not
             ; run_result := ErrorLevel
             ; Show it on a msgbox
-            ; MsgBox % run_result ; —→ For debugging purposes
+            ; MsgBox % run_result ;    —→ For debugging purposes
 
             ; If the previous command was sucessful, then...
             if(ErrorLevel == 0)
@@ -91,8 +91,8 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             ; If it is, then refresh the directory, otherwise, open the directory
         }
         ; For Debugging:
-        ; command_debug(dl_command)                   ; → For debugging purposes
-        ; Run %ComSpec% /c echo %dl_command% & pause  ; → For debugging purposes
+        ; command_debug(dl_command)                   ;     → For debugging purposes
+        ; Run %ComSpec% /c echo %dl_command% & pause  ;     → For debugging purposes
         Return
     }
 
@@ -117,18 +117,18 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
     ; This function gets the URL of the current tab
     ; It returns the URL of the current tab
     capture_tab_url() {
-        Clipboard := "" ;       Empty the clipboard, in case it has something
-        Send ^l ;               Automatically select all the text in the url field
-        Sleep, 5 ;              Insert a little delay to make sure the text is selected
-        Send ^c ;               Copy the current URL into the clipboard, must be selected first in order to work
-        ClipWait, [ 3, 1] ;     Wait 3 seconds for the clipboard to be updated
-        if ErrorLevel { ;       If the clipboard is empty, then...
+        Clipboard := "" ;               Empty the clipboard, in case it has something
+        Send ^l ;                       Automatically select all the text in the url field
+        Sleep, 5 ;                      Insert a little delay to make sure the text is selected
+        Send ^c ;                       Copy the current URL into the clipboard, must be selected first in order to work
+        ClipWait, [ 3, 1] ;             Wait 3 seconds for the clipboard to be updated
+        if ErrorLevel { ;               If the clipboard is empty, then...
             MsgBox, The attempt to copy text onto the clipboard failed.
             return
         }
-        captured_url := Clipboard ;    Save the clipboard content into the variable
-        Clipboard := "" ;              Clear the clipboard for the next use
-        return captured_url ;          Return the captured URL
+        captured_url := Clipboard ;     Save the clipboard content into the variable
+        Clipboard := "" ;               Clear the clipboard for the next use
+        return captured_url ;           Return the captured URL
     }
 
     create_download_directory(dl_dir_path) {
@@ -164,44 +164,44 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
 
         ; Command line arguments for video download
         if(media == "video") {
-            dlp := "yt-dlp" ; Downloader program
-            ffmp := " --ffmpeg-location " ffmpeg_location " " ; ffmpeg location
-            cm0a := " --format bestvideo*+bestaudio/best --merge-output-format mkv" ; Download the best video and audio quality, then merge them into a mkv file
-            cm0b := " --no-warnings --progress" ; Don't show warnings, show progress
-            cm1a := " --embed-metadata" ; Embed metadata
-            cm1b := " --embed-thumbnail" ; Embed thumbnail
-            cm1c := " --embed-chapters" ; Embed chapters
-            cm2a := " --sponsorblock-mark all" ; Mark all sponsorblock segments
-            cm2b := " --sponsorblock-remove default" ; Remove the default sponsorblock segments
+            dlp := "yt-dlp" ;                                                            Downloader program
+            ffmp := " --ffmpeg-location " ffmpeg_location " " ;                          ffmpeg location
+            cm0a := " --format bestvideo*+bestaudio/best --merge-output-format mkv" ;    Download the best video and audio quality, then merge them into a mkv file
+            cm0b := " --no-warnings --progress" ;                                        Don't show warnings, show progress
+            cm1a := " --embed-metadata" ;                                                Embed metadata
+            cm1b := " --embed-thumbnail" ;                                               Embed thumbnail
+            cm1c := " --embed-chapters" ;                                                Embed chapters
+            cm2a := " --sponsorblock-mark all" ;                                         Mark all sponsorblock segments
+            cm2b := " --sponsorblock-remove default" ;                                   Remove the default sponsorblock segments
 
             ; MsgBox to ask the user if he wants to download the video with or without subtitles
             MsgBox, 0x81124, yt-dlp, Deseja fazer download do video com legendas? , 30
             IfMsgBox, Yes
             {
                 ; Write subtitles, embed subtitles, write auto-subtitles
-                cm3a := " --sub-langs en-*,pt-* --sub-format best" ; Select subtitles idioms and the best format available
-                cm3b := " --embed-subs --write-auto-sub" ; Embed subtitles into the video, write auto-subtitles
-                cm3c := " --write-subs" ; Write subtitles to external file
+                cm3a := " --sub-langs en-*,pt-* --sub-format best" ;    Select subtitles idioms and the best format available
+                cm3b := " --embed-subs --write-auto-sub" ;              Embed subtitles into the video, write auto-subtitles
+                cm3c := " --write-subs" ;                               Write subtitles to external file
             }
             else
             {
-                cm3a := " --no-write-auto-sub" ; Don't write automatic subtitles
-                cm3b := " --no-embed-subs" ; Don't embed subtitles
+                cm3a := " --no-write-auto-sub" ;    Don't write automatic subtitles
+                cm3b := " --no-embed-subs" ;        Don't embed subtitles
             }
 
-            ; cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
-            cm5a := " --external-downloader aria2c" ; Use aria2c as the external downloader
-            cm5b := " --external-downloader-args ""-c -x16 -k1M -s16""" ; Set aria2c arguments, see aria2c documentation for more info
-            ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  "                         ; Use this to rename the file ←— NOT WORKING!!!
-            video_url := " " video_url ; Add a space at the beginning of the video URL
-            ; dld := " -P " download_dir                                                                   ; Download output directory
-            dld := " -o " download_dir "\%(title)s.%(ext)s" ; Download output directory, then apply a template to rename the file
+            ; cm4a := " --cookies-from-browser chrome" ;                              Use the cookies from the browser
+            cm5a := " --external-downloader aria2c" ;                                 Use aria2c as the external downloader
+            cm5b := " --external-downloader-args ""-c -x16 -k1M -s16""" ;             Set aria2c arguments, see aria2c documentation for more info
+            ;NOT WORKING! —→ cm6a := "--get-filename -o ""%(title)s.%(ext)s""  " ;    Use this to rename the file ←— NOT WORKING!!!
+            video_url := " " video_url ;                                              Add a space at the beginning of the video URL
+            ; dld := " -P " download_dir ;                                            Download output directory
+            dld := " -o " download_dir "\%(title)s.%(ext)s" ;                         Download output directory, then apply a template to rename the file
 
             ; Build the download command
             dl_command := dlp ffmp cm0a cm0b cm1a cm1b cm1c cm2a cm2b cm3a cm3b cm5a cm5b video_url dld ; Concatenate all the command line arguments
 
-            ; MsgBox, %dl_command%  ; → For debugging purposes
-            Return %dl_command% ; Return the command string to the main function
+            ; MsgBox, %dl_command%  ;    -> For debugging purposes
+            Return %dl_command% ;        Return the command string to the main function
         }
 
         ; Command line arguments for audio download
@@ -209,17 +209,17 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
             ; MsgBox, "Downloading audio..."                                                             ; —→ For debugging purposes
 
             dlp := "yt-dlp" ; Downloader program
-            ffmp := " --ffmpeg-location " ffmpeg_location " " ; ffmpeg location
-            ; cm0 := " --extract-audio --audio-format mp3 --audio-quality 0"                             ; Extract audio, mp3, best quality
-            cm0a := " --format 251" ; Download the best audio quality, 251 stands for webm audio
-            cm0b := " --remux-video opus" ; Remux the video into opus
-            cm0c := " --no-warnings --progress" ; Don't show warnings, show progress
-            cm1a := " --embed-metadata" ; Embed metadata
-            cm1b := " --embed-thumbnail" ; Embed thumbnail
-            cm1c := " --embed-chapters" ; Embed chapters
-            cm2a := " --sponsorblock-mark all" ; Mark all sponsorblock segments
-            cm2b := " --sponsorblock-remove default" ; Remove the default sponsorblock segments
-            ; cm4a := " --cookies-from-browser chrome" ; Use the cookies from the browser
+            ffmp := " --ffmpeg-location " ffmpeg_location " " ;                   ffmpeg location
+            ; cm0 := " --extract-audio --audio-format mp3 --audio-quality 0" ;    Extract audio, mp3, best quality
+            cm0a := " --format 251" ;                                             Download the best audio quality, 251 stands for webm audio
+            cm0b := " --remux-video opus" ;                                       Remux the video into opus
+            cm0c := " --no-warnings --progress" ;                                 Don't show warnings, show progress
+            cm1a := " --embed-metadata" ;                                         Embed metadata
+            cm1b := " --embed-thumbnail" ;                                        Embed thumbnail
+            cm1c := " --embed-chapters" ;                                         Embed chapters
+            cm2a := " --sponsorblock-mark all" ;                                  Mark all sponsorblock segments
+            cm2b := " --sponsorblock-remove default" ;                            Remove the default sponsorblock segments
+            ; cm4a := " --cookies-from-browser chrome" ;                          Use the cookies from the browser
 
             ; After made some tests I found out that aria2c is not the best option for audio downloads
             ; Since generally the audio files are small, aria2c is not necessary and does not perform well
@@ -248,18 +248,19 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
         ; - Contain query parameters
         ; Returns true if the URL is valid, false otherwise.
 
-        regex := "[&\s]" ; Regex to validate the URL
-        if (!RegExMatch(video_url, regex)) { ; If the url doesn't contains spaces and/or ampersands, then...
+        regex := "[&\s]" ; 2                                Regex to validate the URL
+        if (!RegExMatch(video_url, regex)) { ;              If the url doesn't contains spaces and/or ampersands, then...
             return true ; The URL is valid
         }
         else {
-            MsgBox, % "Invalid URL, please try again." ; Inform the user that the URL is invalid
-            return false ; The URL is invalid
+            MsgBox, % "Invalid URL, please try again." ;    Inform the user that the URL is invalid
+            return false ;                                  The URL is invalid
         }
     }
 
     ; ----------------------------------------------------------------------------------------------------------------------
     ; FUTURE IMPLEMENTATIONS
+
     ; ffmpeg_post_processing() {
     ;     ; Uses ffmpeg to compress the video for space saving
     ;     ; ffmpeg -i %video_url% -c:v libx264 -crf 18 -preset slow -c:a copy -c:s mov_text %(title)s.mp4
@@ -269,6 +270,7 @@ SetTitleMatchMode 2 ; Recommended for new scripts to reduce the number of false 
 
     ; ----------------------------------------------------------------------------------------------------------------------
     ; DEBBUGING FUNCTIONS
+
     display_downdir(down_dir) {
         MsgBox, , % "Download Info", % "Save file path: " . down_dir, 20
         Return
