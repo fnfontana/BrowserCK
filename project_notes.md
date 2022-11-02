@@ -1,8 +1,8 @@
-# GChromeCK
+# BrowserCK
 
 ---
 
-## What is GChromeCK?
+## What is BrowserCK?
 
 An AutoHotkey script that enhances the Google Chrome browser with keyboard shortcuts.
 
@@ -35,7 +35,7 @@ An AutoHotkey script that enhances the Google Chrome browser with keyboard short
   **Solutions:**
   
   - The problematic command mentioned before was replaced by a new one:
-    
+
     `RunWait %ComSpec% /c %dl_cmd% && taskkill /f /im cmd.exe`
   
   - Followed by a new dedicated funciton *check_explorer_path(path)*, it solved the problem of creating a new window at each time the command run;
@@ -46,7 +46,7 @@ An AutoHotkey script that enhances the Google Chrome browser with keyboard short
 
 ## Next to Implement
 
-- [ ] 
+- [ ]
 
 ---
 
