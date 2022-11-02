@@ -1,8 +1,8 @@
-# GChromeCK
+# BrowserCK
 
-GChromeCK is an [AutoHotKey](https://www.autohotkey.com/) script that enhances the browsing experience and provides a number of tools for overall tasks.
+BrowserCK is an [AutoHotKey](https://www.autohotkey.com/) script that enhances the browsing experience and provides a number of tools for overall tasks.
 
-The goal of GChromeCK is to facilitate a variety of tasks through the use of keyboard shortcuts, including switching between current and previous tabs, pinning or unpinning tabs, and expanding pinned tabs into pop-ups.
+The goal of BrowserCK is to facilitate a variety of tasks through the use of keyboard shortcuts, including switching between current and previous tabs, pinning or unpinning tabs, and expanding pinned tabs into pop-ups.
 
 Also includes a toolkit that allows users to quickly download videos and songs from the Internet.
 
