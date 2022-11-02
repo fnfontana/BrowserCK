@@ -14,4 +14,5 @@ bin/GChromeCK.exe
 source/GChromeCK_testing.exe
 bin/GChromeCK.exe
 
-
+# Ignore the legacy binaries
+bin/GChromeCK.7z
