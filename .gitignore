@@ -1,7 +1,17 @@
 # Ignore the directory: ../GChromeCK/source/validate_command/
 source/validate_command/
 
+# Ignore all the .exe files
+*.exe
+
+# Ignore BrowserCK.exe and related files - Current name
+bin/BrowserCK.exe
+source/BrowserCK_testing.exe
+bin/BrowserCK.exe
+
+# Ignore GChromeCK.exe and related files - Legacy name
 bin/GChromeCK.exe
 source/GChromeCK_testing.exe
-*.exe
 bin/GChromeCK.exe
+
+
