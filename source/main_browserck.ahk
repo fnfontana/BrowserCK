@@ -22,7 +22,11 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
     download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
     download_audio_directory := "A:\Applications\AntennaPod"
     ;----------------------------------------------------------------------------------------------------------------------
+    ; Quick Reference:
+    ;   ^ = CTRL        ! = ALT         + = Shift        # = Win
+
     ; KEYBINDINGS
+
     ; Navigation arrows
     ^!Left::Send ^{PgUp} ;  ctrl+alt+pageup              →  go to the previous tab
     ^!Right::Send ^{PgDn} ; ctrl+alt+pagedown            →  go to the next tab
@@ -30,16 +34,26 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
     ^!Down::Send !+{Z} ;    ctrl+alt+shift+downarrow     →  Pin/Unpin the current tab
 
     ; Numpad activation keys
-    ^Numpad0::Send !+{P} ;                                  numpad3 → Activate Simple Print extension
-    ^Numpad1::Send !+{X} ;                                  numpad1 → Activate Raindrop.io extension
-    ^Numpad2::Send !+{C} ;                                  numpad2 → Activate Just Read extension
-
-    ; Numpad for video/audio download
+    ; Numpad 0: 0
+    ^Numpad0::Send !+{P} ;                                  numpad0 → Activate Simple Print extension
+    ^+Numpad0::Send !+{1} ;                                 numpad0 → Alternate Jiffreader extension
+    ; Numpad 1: 1
+    ^Numpad1::Send !{2} ;                                   numpad1 → Save page to Raindrop.io
+    ^+Numpad1::Send !+{R} ;                                 numpad1 → Opens Raindrop.io website
+    ; Numpad 2: 2
+    ^Numpad2::Send !+{2} ;                                  numpad2 → Save page to Pocket
+    ; Numpad 3: 3 yt-dlp video download
     ^Numpad3::ytdl(download_video_directory, "video") ;     numpad3 → Download the current video
     ^!Numpad3::display_downdir(download_video_directory) ;  numpad3 → Display the download directory
-
+    ; Numpad 4: 4
+    ; Numpad 5: 5
+    ; Numpad 6: 6 yt-dlp audio download
     ^Numpad6::ytdl(download_audio_directory, "audio") ;     numpad6 → Download the current video and extract the audio
     ^!Numpad6::display_downdir(download_audio_directory) ;  numpad6 → Display the download directory
+    ; Numpad 7: 7
+    ; Numpad 8: 8
+    ; Numpad 9: 9
+    ; Numpad .: .
 
     Return
 
