@@ -19,41 +19,56 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
 ; Brave Browser
 #IfWinActive, ahk_exe brave.exe
     ;----------------------------------------------------------------------------------------------------------------------
+    ; PATH TO SAVE FILES
     download_video_directory := "C:\Users\" . A_UserName . "\Downloads\Videos"
     download_audio_directory := "A:\Applications\AntennaPod"
+
+    ; URLs
+    audioread_url := "https://audioread.com/playlist"
+
+    ; EXECUTABLE PATHS
+    keepassxc_path := "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\KeePassXC\KeePassXC.lnk"
     ;----------------------------------------------------------------------------------------------------------------------
-    ; Quick Reference:
+    ; QUICK REFERENCE:
     ;   ^ = CTRL        ! = ALT         + = Shift        # = Win
 
     ; KEYBINDINGS
 
-    ; Navigation arrows
-    ^!Left::Send ^{PgUp} ;  ctrl+alt+pageup              →  go to the previous tab
-    ^!Right::Send ^{PgDn} ; ctrl+alt+pagedown            →  go to the next tab
-    ^!Up::Send !+{V} ;      ctrl+alt+shift+uparrow       →  Pin/Unpin the current tab
-    ^!Down::Send !+{Z} ;    ctrl+alt+shift+downarrow     →  Pin/Unpin the current tab
+    ; NAVIGATION ARROWS
+    ^!Left::Send ^{PgUp} ;         ctrl+alt+pageup              →  go to the previous tab
+    ^!Right::Send ^{PgDn} ;        ctrl+alt+pagedown            →  go to the next tab
+    ^!Up::Send !+{V} ;             ctrl+alt+shift+uparrow       →  Pin/Unpin the current tab
+    ^!Down::Send !+{Z} ;           ctrl+alt+shift+downarrow     →  Pin/Unpin the current tab
 
-    ; Numpad activation keys
-    ; Numpad 0: 0
-    ^Numpad0::Send !+{P} ;                                  numpad0 → Activate Simple Print extension
-    ^+Numpad0::Send !+{1} ;                                 numpad0 → Alternate Jiffreader extension
-    ; Numpad 1: 1
-    ^Numpad1::Send !{2} ;                                   numpad1 → Save page to Raindrop.io
-    ^+Numpad1::Send !+{R} ;                                 numpad1 → Opens Raindrop.io website
-    ; Numpad 2: 2
-    ^Numpad2::Send !+{2} ;                                  numpad2 → Save page to Pocket
-    ; Numpad 3: 3 yt-dlp video download
-    ^Numpad3::ytdl(download_video_directory, "video") ;     numpad3 → Download the current video
-    ^!Numpad3::display_downdir(download_video_directory) ;  numpad3 → Display the download directory
-    ; Numpad 4: 4
+    ; NUMPAD ACTIVATION KEYS
+    ; Numpad 0: 0                                             --> Reading / Printing
+    ^Numpad0::Send !+{P} ;                                      → Activate Simple Print extension
+    ^!Numpad0::Send !+{1} ;                                     → Alternate Jiffreader extension
+    ; Numpad 1: 1                                             --> Raindrop.io bookmarking
+    ^Numpad1::Send !{2} ;                                       → Save page to Raindrop.io
+    ^!Numpad1::Send !+{R} ;                                     → Opens Raindrop.io website
+    ; Numpad 2: 2                                             -->  Save to read later
+    ^Numpad2::Send ^+{2} ;                                      → Save page to Pocket
+    ; Numpad 3: 3                                             --> yt-dlp video download
+    ^Numpad3::ytdl(download_video_directory, "video") ;         → Download the current video
+    ^!Numpad3::display_downdir(download_video_directory) ;      → Display the download directory
+    ; Numpad 4: 4                                             --> text-to-speech (audioread.com)
+    ^Numpad4::Send !+{2} ;                                      → Save page to Audioread
+    ^!Numpad4::open_in_browser(audioread_url) ;                 → Opens Audioread website
     ; Numpad 5: 5
-    ; Numpad 6: 6 yt-dlp audio download
-    ^Numpad6::ytdl(download_audio_directory, "audio") ;     numpad6 → Download the current video and extract the audio
-    ^!Numpad6::display_downdir(download_audio_directory) ;  numpad6 → Display the download directory
-    ; Numpad 7: 7
-    ; Numpad 8: 8
-    ; Numpad 9: 9
-    ; Numpad .: .
+    ^Numpad5::Send !+{3} ;                                      → Summarize the current page with Summary
+    ; Numpad 6: 6                                             --> yt-dlp audio download
+    ^Numpad6::ytdl(download_audio_directory, "audio") ;         → Download the current video and extract the audio
+    ^!Numpad6::display_downdir(download_audio_directory) ;      → Display the download directory
+    ; Numpad 7: 7                                             --> Web Archives
+    ^Numpad7::Send !{3} ;                                       → Search page on Web Archives
+    ^!Numpad7::Send ^{3} ;                                      → Send page to archive.ph
+    ; Numpad 8: 8                                             --> SingleFile & SingleFileZ
+    ^Numpad8::Send !+{3} ;                                      → Save page using SingleFile
+    ^!Numpad8::Send ^+{3} ;                                     → Save page using SingleFileZ
+    ; Numpad 9: 9                                             --> Not Defined Yet...
+    ; Numpad .: .                                             --> Opens KeePassXC
+    ^NumpadDot::open_program(keepassxc_path) ;                  → Opens KeePassXC
 
     Return
 
@@ -270,6 +285,16 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
             MsgBox, % "Invalid URL, please try again." ;    Inform the user that the URL is invalid
             return false ;                                  The URL is invalid
         }
+    }
+
+    ; This function opens a newtab in the default browser with the URL passed as argument
+    open_in_browser(url) {
+        Run, % "powershell -WindowStyle hidden Start-Process " url
+    }
+
+    ; This function opens a program window given the executable path or shortcut path
+    open_program(path) {
+        Run, % path
     }
 
     ; ----------------------------------------------------------------------------------------------------------------------
