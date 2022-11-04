@@ -56,7 +56,7 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
     ^Numpad4::Send !+{2} ;                                      → Save page to Audioread
     ^!Numpad4::open_in_browser(audioread_url) ;                 → Opens Audioread website
     ; Numpad 5: 5
-    ^Numpad5::Send !+{3} ;                                      → Summarize the current page with Summary
+    ^Numpad5::Send !+{4} ;                                      → Summarize the current page with Summary
     ; Numpad 6: 6                                             --> yt-dlp audio download
     ^Numpad6::ytdl(download_audio_directory, "audio") ;         → Download the current video and extract the audio
     ^!Numpad6::display_downdir(download_audio_directory) ;      → Display the download directory
