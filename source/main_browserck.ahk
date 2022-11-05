@@ -28,6 +28,7 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
 
     ; EXECUTABLE PATHS
     keepassxc_path := "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\KeePassXC\KeePassXC.lnk"
+    raindrop_path := "C:\Users\ffont\scoop\apps\raindrop.io\current\Raindrop.io.exe"
     ;----------------------------------------------------------------------------------------------------------------------
     ; QUICK REFERENCE:
     ;   ^ = CTRL        ! = ALT         + = Shift        # = Win
@@ -46,7 +47,8 @@ SetTitleMatchMode 2 ;            Recommended for new scripts to reduce the numbe
     ^!Numpad0::Send !+{1} ;                                     → Alternate Jiffreader extension
     ; Numpad 1: 1                                             --> Raindrop.io bookmarking
     ^Numpad1::Send !{2} ;                                       → Save page to Raindrop.io
-    ^!Numpad1::Send !+{R} ;                                     → Opens Raindrop.io website
+    ^!Numpad1::open_program(raindrop_path) ;                    → Opens Raindrop.io window
+    ; ^!Numpad1::Send !+{R} ;                                     → Opens Raindrop.io website
     ; Numpad 2: 2                                             -->  Save to read later
     ^Numpad2::Send ^+{2} ;                                      → Save page to Pocket
     ; Numpad 3: 3                                             --> yt-dlp video download
